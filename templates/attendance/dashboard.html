@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,7 +24,7 @@
             margin: 0 auto;
             background: white;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
 
@@ -121,7 +122,7 @@
             background: white;
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
         .attendance-table th {
@@ -149,21 +150,19 @@
             text-align: center;
             display: inline-block;
             min-width: 100px;
+            background: transparent;
         }
 
         .status-full-day {
-            background: #d4edda;
-            color: #155724;
+            color: #28a745;
         }
 
         .status-half-day {
-            background: #fff3cd;
-            color: #856404;
+            color: #ffc107;
         }
 
         .status-no-attendance {
-            background: #f8d7da;
-            color: #721c24;
+            color: #dc3545;
         }
 
         .section-title {
@@ -204,7 +203,7 @@
             background: white;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
 
@@ -223,9 +222,9 @@
             position: absolute;
             top: 20px;
             right: 20px;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             color: white;
-            border: 1px solid rgba(255,255,255,0.3);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             padding: 10px 20px;
             border-radius: 5px;
             text-decoration: none;
@@ -233,7 +232,7 @@
         }
 
         .logout-btn:hover {
-            background: rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.3);
             color: white;
             text-decoration: none;
         }
@@ -246,7 +245,7 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.5);
+            background-color: rgba(0, 0, 0, 0.5);
         }
 
         .modal-content {
@@ -257,7 +256,7 @@
             width: 80%;
             max-width: 500px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
         .modal h2 {
@@ -277,14 +276,43 @@
         .modal-buttons button {
             margin: 0 10px;
         }
+
+        .status-full_day {
+            color: #28a745 !important;
+            /* Green text */
+        }
+
+        .status-half_day {
+            color: #ffc107 !important;
+            /* Yellow/Orange text */
+        }
+
+        .status-no_attendance {
+            color: #dc3545 !important;
+            /* Red text */
+        }
+
+        /* Alternative approach - keep both versions for compatibility */
+        .status-fullday {
+            color: #28a745 !important;
+        }
+
+        .status-halfday {
+            color: #ffc107 !important;
+        }
+
+        .status-noattendance {
+            color: #dc3545 !important;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header" style="position: relative;">
-            <a href="/accounts/logout/" class="logout-btn">Logout</a>
+            <a href="/accounts/login/" class="logout-btn">Logout</a>
             <h1>Attendance Dashboard</h1>
-            <div class="user-info">Welcome, {{ user.get_full_name|default:user.username }}</div>
+            <div class="user-info">Welcome, {% if user.first_name and user.last_name %}{{ user.first_name }} {{ user.last_name }}{% else %}{{ user.username }}{% endif %}</div>
         </div>
 
         <div class="content">
@@ -295,42 +323,43 @@
 
                 <div id="status-display" class="status-display">
                     {% if today_record.check_in_time and not today_record.check_out_time %}
-                        <div class="status-checked-in">✓ Checked In at {{ today_record.check_in_time|time:"H:i:s" }}</div>
+                    <div class="status-checked-in">✓ Checked In at {{ today_record.check_in_time|time:"H:i:s" }}</div>
                     {% elif today_record.check_out_time %}
-                        <div class="status-checked-out">✓ Checked Out at {{ today_record.check_out_time|time:"H:i:s" }}</div>
+                    <div class="status-checked-out">✓ Checked Out at {{ today_record.check_out_time|time:"H:i:s" }}
+                    </div>
                     {% else %}
-                        <div>Not checked in yet</div>
+                    <div>Not checked in yet</div>
                     {% endif %}
                 </div>
 
                 <div id="time-info" class="time-info">
                     {% if today_record.check_in_time %}
-                        <div class="time-card">
-                            <h3>Check In</h3>
-                            <div class="time">{{ today_record.check_in_time|time:"H:i:s" }}</div>
-                        </div>
+                    <div class="time-card">
+                        <h3>Check In</h3>
+                        <div class="time">{{ today_record.check_in_time|time:"H:i:s" }}</div>
+                    </div>
 
-                        {% if today_record.check_out_time %}
-                            <div class="time-card">
-                                <h3>Check Out</h3>
-                                <div class="time">{{ today_record.check_out_time|time:"H:i:s" }}</div>
-                            </div>
+                    {% if today_record.check_out_time %}
+                    <div class="time-card">
+                        <h3>Check Out</h3>
+                        <div class="time">{{ today_record.check_out_time|time:"H:i:s" }}</div>
+                    </div>
 
-                            <div class="time-card">
-                                <h3>Total Hours</h3>
-                                <div class="time">{{ today_record.total_hours|floatformat:2 }}</div>
-                            </div>
-                        {% endif %}
+                    <div class="time-card">
+                        <h3>Total Hours</h3>
+                        <div class="time">{{ today_record.total_hours|floatformat:2 }}</div>
+                    </div>
+                    {% endif %}
                     {% endif %}
                 </div>
 
                 <div style="margin-top: 20px;">
                     {% if not today_record.check_in_time %}
-                        <button id="check-in-btn" class="btn btn-primary">Check In</button>
+                    <button id="check-in-btn" class="btn btn-primary">Check In</button>
                     {% elif not today_record.check_out_time %}
-                        <button id="check-out-btn" class="btn btn-danger">Check Out</button>
+                    <button id="check-out-btn" class="btn btn-danger">Check Out</button>
                     {% else %}
-                        <p style="color: #28a745; font-weight: 600;">Attendance completed for today!</p>
+                    <p style="color: #28a745; font-weight: 600;">Attendance completed for today!</p>
                     {% endif %}
                 </div>
             </div>
@@ -355,7 +384,7 @@
                             <td>{{ record.check_out_time|time:"H:i:s"|default:"--" }}</td>
                             <td>{{ record.total_hours|floatformat:2 }}</td>
                             <td>
-                                <span class="status-badge status-{{ record.attendance_status|cut:'_' }}">
+                                <span class="status-badge status-{{ record.attendance_status }}">
                                     {{ record.get_attendance_status_display }}
                                 </span>
                             </td>
@@ -415,7 +444,7 @@
         // Check In functionality
         const checkInBtn = document.getElementById('check-in-btn');
         if (checkInBtn) {
-            checkInBtn.addEventListener('click', function() {
+            checkInBtn.addEventListener('click', function () {
                 fetch('/attendance/check-in/', {
                     method: 'POST',
                     headers: {
@@ -423,6 +452,87 @@
                         'Content-Type': 'application/json',
                     },
                 })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            showAlert(data.message, 'success');
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
+                        } else {
+                            showAlert(data.message, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        showAlert('An error occurred. Please try again.', 'error');
+                    });
+            });
+        }
+
+        // Check Out functionality with confirmation
+        const checkOutBtn = document.getElementById('check-out-btn');
+        const modal = document.getElementById('checkoutModal');
+        const confirmBtn = document.getElementById('confirm-checkout');
+        const cancelBtn = document.getElementById('cancel-checkout');
+        const modalMessage = document.getElementById('modal-message');
+
+        if (checkOutBtn) {
+            checkOutBtn.addEventListener('click', function () {
+                // First, check current hours
+                fetch('/attendance/current-hours/')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.can_leave) {
+                            // Can leave without confirmation
+                            performCheckOut();
+                        } else {
+                            // Show confirmation modal
+                            const hoursForHalfDay = Math.max(0, data.hours_for_half_day).toFixed(1);
+                            const hoursForFullDay = Math.max(0, data.hours_for_full_day).toFixed(1);
+                            const currentHours = data.current_hours.toFixed(1);
+
+                            modalMessage.innerHTML = `
+                            <strong>You've only worked ${currentHours} hours today.</strong><br><br>
+                            Time remaining for:<br>
+                            • Half day (4 hours): <strong>${hoursForHalfDay} hours</strong><br>
+                            • Full day (8 hours): <strong>${hoursForFullDay} hours</strong><br><br>
+                            Are you sure you want to check out now?
+                        `;
+
+                            modal.style.display = 'block';
+                        }
+                    });
+            });
+        }
+
+        if (confirmBtn) {
+            confirmBtn.addEventListener('click', function () {
+                modal.style.display = 'none';
+                performCheckOut();
+            });
+        }
+
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', function () {
+                modal.style.display = 'none';
+            });
+        }
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function (event) {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        function performCheckOut() {
+            fetch('/attendance/check-out/', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                    'Content-Type': 'application/json',
+                },
+            })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
@@ -437,88 +547,8 @@
                 .catch(error => {
                     showAlert('An error occurred. Please try again.', 'error');
                 });
-            });
-        }
-
-        // Check Out functionality with confirmation
-        const checkOutBtn = document.getElementById('check-out-btn');
-        const modal = document.getElementById('checkoutModal');
-        const confirmBtn = document.getElementById('confirm-checkout');
-        const cancelBtn = document.getElementById('cancel-checkout');
-        const modalMessage = document.getElementById('modal-message');
-
-        if (checkOutBtn) {
-            checkOutBtn.addEventListener('click', function() {
-                // First, check current hours
-                fetch('/attendance/current-hours/')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.can_leave) {
-                        // Can leave without confirmation
-                        performCheckOut();
-                    } else {
-                        // Show confirmation modal
-                        const hoursForHalfDay = Math.max(0, data.hours_for_half_day).toFixed(1);
-                        const hoursForFullDay = Math.max(0, data.hours_for_full_day).toFixed(1);
-                        const currentHours = data.current_hours.toFixed(1);
-
-                        modalMessage.innerHTML = `
-                            <strong>You've only worked ${currentHours} hours today.</strong><br><br>
-                            Time remaining for:<br>
-                            • Half day (4 hours): <strong>${hoursForHalfDay} hours</strong><br>
-                            • Full day (8 hours): <strong>${hoursForFullDay} hours</strong><br><br>
-                            Are you sure you want to check out now?
-                        `;
-
-                        modal.style.display = 'block';
-                    }
-                });
-            });
-        }
-
-        if (confirmBtn) {
-            confirmBtn.addEventListener('click', function() {
-                modal.style.display = 'none';
-                performCheckOut();
-            });
-        }
-
-        if (cancelBtn) {
-            cancelBtn.addEventListener('click', function() {
-                modal.style.display = 'none';
-            });
-        }
-
-        // Close modal when clicking outside
-        window.addEventListener('click', function(event) {
-            if (event.target === modal) {
-                modal.style.display = 'none';
-            }
-        });
-
-        function performCheckOut() {
-            fetch('/attendance/check-out/', {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': csrftoken,
-                    'Content-Type': 'application/json',
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showAlert(data.message, 'success');
-                    setTimeout(() => {
-                        location.reload();
-                    }, 1000);
-                } else {
-                    showAlert(data.message, 'error');
-                }
-            })
-            .catch(error => {
-                showAlert('An error occurred. Please try again.', 'error');
-            });
         }
     </script>
 </body>
+
 </html>

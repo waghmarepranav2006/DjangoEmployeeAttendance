@@ -4,12 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="24a24e4b-9d0d-452f-bfca-dd12d7644d57" name="Changes" comment="Initial Commit">
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+    <list default="true" id="24a24e4b-9d0d-452f-bfca-dd12d7644d57" name="Changes" comment="UTC -&gt; IST for user, redirected login page">
+      <change afterPath="$PROJECT_DIR$/attendance/management/commands/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/attendance/management/commands/create_dummy_data.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DjangoProject1/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoProject1/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DjangoProject1/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/DjangoProject1/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/attendance/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/attendance/dashboard.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,6 +28,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "waghmarepranav2006"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/waghmarepranav2006/DjangoEmployeeAttendance.git",
+    "accountId": "0bd50fa4-6c6f-4d87-882b-de63ec1bd7db"
+  }
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
 }</component>
@@ -46,7 +59,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "django.template.preview.state": "SHOW_EDITOR",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
     "junie.onboarding.icon.badge.shown": "true",
     "node.js.detected.package.eslint": "true",
@@ -100,7 +113,7 @@
       <option name="presentableId" value="Default" />
       <updated>1749840078011</updated>
       <workItem from="1749840079189" duration="3060000" />
-      <workItem from="1749843507639" duration="1311000" />
+      <workItem from="1749843507639" duration="7254000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit">
       <option name="closed" value="true" />
@@ -110,7 +123,15 @@
       <option name="project" value="LOCAL" />
       <updated>1749843216543</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="UTC -&gt; IST for user, redirected login page">
+      <option name="closed" value="true" />
+      <created>1749845100017</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1749845100017</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -129,6 +150,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial Commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="Initial Commit" />
+    <MESSAGE value="UTC -&gt; IST for user, redirected login page" />
+    <option name="LAST_COMMIT_MESSAGE" value="UTC -&gt; IST for user, redirected login page" />
   </component>
 </project>
