@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Attendance Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .user-info {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .check-in-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .status-display {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .status-checked-in {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status-checked-out {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0 10px;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        .btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .attendance-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .attendance-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .attendance-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .attendance-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            text-align: center;
+            display: inline-block;
+            min-width: 100px;
+        }
+
+        .status-full-day {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-half-day {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-no-attendance {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #333;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .time-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .time-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .time-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .time-card .time {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.3);
+            color: white;
+            text-decoration: none;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 80%;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .modal h2 {
+            color: #ff6b6b;
+            margin-bottom: 20px;
+        }
+
+        .modal p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .modal-buttons {
+            margin-top: 25px;
+        }
+
+        .modal-buttons button {
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header" style="position: relative;">
+            <a href="/accounts/logout/" class="logout-btn">Logout</a>
+            <h1>Attendance Dashboard</h1>
+            <div class="user-info">Welcome, {{ user.get_full_name|default:user.username }}</div>
+        </div>
+
+        <div class="content">
+            <div id="alert-container"></div>
+
+            <div class="check-in-section">
+                <h2 class="section-title">Today's Attendance</h2>
+
+                <div id="status-display" class="status-display">
+                    {% if today_record.check_in_time and not today_record.check_out_time %}
+                        <div class="status-checked-in">✓ Checked In at {{ today_record.check_in_time|time:"H:i:s" }}</div>
+                    {% elif today_record.check_out_time %}
+                        <div class="status-checked-out">✓ Checked Out at {{ today_record.check_out_time|time:"H:i:s" }}</div>
+                    {% else %}
+                        <div>Not checked in yet</div>
+                    {% endif %}
+                </div>
+
+                <div id="time-info" class="time-info">
+                    {% if today_record.check_in_time %}
+                        <div class="time-card">
+                            <h3>Check In</h3>
+                            <div class="time">{{ today_record.check_in_time|time:"H:i:s" }}</div>
+                        </div>
+
+                        {% if today_record.check_out_time %}
+                            <div class="time-card">
+                                <h3>Check Out</h3>
+                                <div class="time">{{ today_record.check_out_time|time:"H:i:s" }}</div>
+                            </div>
+
+                            <div class="time-card">
+                                <h3>Total Hours</h3>
+                                <div class="time">{{ today_record.total_hours|floatformat:2 }}</div>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+
+                <div style="margin-top: 20px;">
+                    {% if not today_record.check_in_time %}
+                        <button id="check-in-btn" class="btn btn-primary">Check In</button>
+                    {% elif not today_record.check_out_time %}
+                        <button id="check-out-btn" class="btn btn-danger">Check Out</button>
+                    {% else %}
+                        <p style="color: #28a745; font-weight: 600;">Attendance completed for today!</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div>
+                <h2 class="section-title">Attendance History</h2>
+                <table class="attendance-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Check In</th>
+                            <th>Check Out</th>
+                            <th>Total Hours</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in attendance_history %}
+                        <tr>
+                            <td>{{ record.date|date:"M d, Y" }}</td>
+                            <td>{{ record.check_in_time|time:"H:i:s"|default:"--" }}</td>
+                            <td>{{ record.check_out_time|time:"H:i:s"|default:"--" }}</td>
+                            <td>{{ record.total_hours|floatformat:2 }}</td>
+                            <td>
+                                <span class="status-badge status-{{ record.attendance_status|cut:'_' }}">
+                                    {{ record.get_attendance_status_display }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" style="text-align: center; color: #666;">No attendance records found</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="checkoutModal" class="modal">
+        <div class="modal-content">
+            <h2>⚠️ Early Check Out Warning</h2>
+            <p id="modal-message"></p>
+            <div class="modal-buttons">
+                <button id="confirm-checkout" class="btn btn-danger">Yes, Check Out</button>
+                <button id="cancel-checkout" class="btn btn-primary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // CSRF token for AJAX requests
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        const csrftoken = getCookie('csrftoken');
+
+        function showAlert(message, type) {
+            const alertContainer = document.getElementById('alert-container');
+            const alertClass = type === 'success' ? 'alert-success' : 'alert-error';
+            alertContainer.innerHTML = `<div class="alert ${alertClass}">${message}</div>`;
+
+            setTimeout(() => {
+                alertContainer.innerHTML = '';
+            }, 5000);
+        }
+
+        // Check In functionality
+        const checkInBtn = document.getElementById('check-in-btn');
+        if (checkInBtn) {
+            checkInBtn.addEventListener('click', function() {
+                fetch('/attendance/check-in/', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken,
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showAlert(data.message, 'success');
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
+                    } else {
+                        showAlert(data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    showAlert('An error occurred. Please try again.', 'error');
+                });
+            });
+        }
+
+        // Check Out functionality with confirmation
+        const checkOutBtn = document.getElementById('check-out-btn');
+        const modal = document.getElementById('checkoutModal');
+        const confirmBtn = document.getElementById('confirm-checkout');
+        const cancelBtn = document.getElementById('cancel-checkout');
+        const modalMessage = document.getElementById('modal-message');
+
+        if (checkOutBtn) {
+            checkOutBtn.addEventListener('click', function() {
+                // First, check current hours
+                fetch('/attendance/current-hours/')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.can_leave) {
+                        // Can leave without confirmation
+                        performCheckOut();
+                    } else {
+                        // Show confirmation modal
+                        const hoursForHalfDay = Math.max(0, data.hours_for_half_day).toFixed(1);
+                        const hoursForFullDay = Math.max(0, data.hours_for_full_day).toFixed(1);
+                        const currentHours = data.current_hours.toFixed(1);
+
+                        modalMessage.innerHTML = `
+                            <strong>You've only worked ${currentHours} hours today.</strong><br><br>
+                            Time remaining for:<br>
+                            • Half day (4 hours): <strong>${hoursForHalfDay} hours</strong><br>
+                            • Full day (8 hours): <strong>${hoursForFullDay} hours</strong><br><br>
+                            Are you sure you want to check out now?
+                        `;
+
+                        modal.style.display = 'block';
+                    }
+                });
+            });
+        }
+
+        if (confirmBtn) {
+            confirmBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+                performCheckOut();
+            });
+        }
+
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+        }
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        function performCheckOut() {
+            fetch('/attendance/check-out/', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showAlert(data.message, 'success');
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+                } else {
+                    showAlert(data.message, 'error');
+                }
+            })
+            .catch(error => {
+                showAlert('An error occurred. Please try again.', 'error');
+            });
+        }
+    </script>
+</body>
+</html>
