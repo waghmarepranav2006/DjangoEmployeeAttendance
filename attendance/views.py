@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout
@@ -21,10 +23,37 @@ def dashboard(request):
         defaults={'check_in_time': None, 'check_out_time': None}
     )
 
-    # Get all attendance records for the user
-    attendance_history = AttendanceRecord.objects.filter(
-        user=request.user
-    ).order_by('-date', '-check_in_time')
+    # Get filter parameter from request
+    filter_type = request.GET.get('filter', 'all')
+
+    # Base queryset
+    attendance_queryset = AttendanceRecord.objects.filter(user=request.user)
+
+    # Apply date filtering
+    if filter_type == 'week':
+        # Current week (Monday to Sunday)
+        start_of_week = today - timedelta(days=today.weekday())
+        end_of_week = start_of_week + timedelta(days=6)
+        attendance_history = attendance_queryset.filter(
+            date__range=[start_of_week, end_of_week]
+        )
+    elif filter_type == 'month':
+        # Current month
+        attendance_history = attendance_queryset.filter(
+            date__year=today.year,
+            date__month=today.month
+        )
+    elif filter_type == 'year':
+        # Current year
+        attendance_history = attendance_queryset.filter(
+            date__year=today.year
+        )
+    else:
+        # All records (default)
+        attendance_history = attendance_queryset
+
+    # Order by date (latest first)
+    attendance_history = attendance_history.order_by('-date', '-check_in_time')
 
     context = {
         'today_record': attendance_record,

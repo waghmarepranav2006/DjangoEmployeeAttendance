@@ -304,6 +304,52 @@
         .status-noattendance {
             color: #dc3545 !important;
         }
+
+         .filter-section {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .filter-buttons {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .filter-btn {
+        padding: 10px 20px;
+        background: #f8f9fa;
+        color: #333;
+        text-decoration: none;
+        border-radius: 6px;
+        border: 2px solid #e9ecef;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .filter-btn:hover {
+        background: #e9ecef;
+        transform: translateY(-1px);
+    }
+
+    .filter-btn.active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-color: #667eea;
+    }
+
+    @media (max-width: 768px) {
+        .filter-buttons {
+            flex-direction: column;
+        }
+
+        .filter-btn {
+            text-align: center;
+        }
+    }
+
     </style>
 </head>
 
@@ -363,6 +409,23 @@
                     {% endif %}
                 </div>
             </div>
+            <div class="filter-section" style="margin-bottom: 20px;">
+    <h3 style="margin-bottom: 15px;">Filter Attendance History</h3>
+    <div class="filter-buttons">
+        <a href="?filter=all" class="filter-btn {% if current_filter == 'all' %}active{% endif %}">
+            All Records
+        </a>
+        <a href="?filter=week" class="filter-btn {% if current_filter == 'week' %}active{% endif %}">
+            This Week
+        </a>
+        <a href="?filter=month" class="filter-btn {% if current_filter == 'month' %}active{% endif %}">
+            This Month
+        </a>
+        <a href="?filter=year" class="filter-btn {% if current_filter == 'year' %}active{% endif %}">
+            This Year
+        </a>
+    </div>
+</div>
 
             <div>
                 <h2 class="section-title">Attendance History</h2>
